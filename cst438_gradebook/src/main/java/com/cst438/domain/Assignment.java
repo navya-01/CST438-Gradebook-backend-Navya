@@ -1,6 +1,6 @@
 package com.cst438.domain;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ public class Assignment {
 	private String name;
 	private Date dueDate;
 
-	
+
 	public int getId() {
 		return id;
 	}
@@ -41,13 +41,23 @@ public class Assignment {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public List<AssignmentGrade> getAssignmentGrades() {
+		return assignmentGrades;
+	}
+
+	public void setAssignmentGrades(List<AssignmentGrade> assignmentGrades) {
+		this.assignmentGrades = assignmentGrades;
+	}
+
 	public Date getDueDate() {
 		return dueDate;
 	}
+
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
-	
+
 	public Course getCourse() {
 		return course;
 	}
