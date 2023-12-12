@@ -29,3 +29,10 @@ insert into assignment_grade (score, assignment_id, enrollment_id) values
 (94, 2, 2), 
 (95, 2, 3)
 ;
+
+insert into user_table
+(username, password, role) values
+                                   ('user@csumb.edu', '$2a$10$3XpwR7rg4/kUoyew/GPd8uJLNmesRU/9e77FDW5aMvK60QWwjus/K','USER'),
+                                   ('dwisneski@csumb.edu', '$2a$10$/ywDa8B3pkNfA36oZA1T.OODGXEcPE7lVztilCrnLdrbjZ8.9o1l2','INSTRUCTOR'),
+                                   ('admin@csumb.edu', '$2a$10$8cjz47bjbR4Mn8GMg9IZx.vyjhLXR/SKKMSZ9.mP9vpMu0ssKi8GW' , 'ADMIN');
+

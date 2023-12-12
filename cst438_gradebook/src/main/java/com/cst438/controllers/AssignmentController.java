@@ -16,6 +16,7 @@ import com.cst438.domain.AssignmentDTO;
 import com.cst438.domain.AssignmentRepository;
 import com.cst438.domain.Course;
 import com.cst438.domain.CourseRepository;
+import java.security.Principal;
 
 @RestController
 @CrossOrigin
@@ -28,10 +29,12 @@ public class AssignmentController {
     CourseRepository courseRepository;
 
     @GetMapping("/assignment")
-    public AssignmentDTO[] getAllAssignmentsForInstructor() {
-        // get all assignments for this instructor
+    public AssignmentDTO[] getAllAssignmentsForInstructor(Principal principal) {
 
-        String instructorEmail = "dwisneski@csumb.edu";  // username (should be instructor's email)
+        // get all assignments for this instructor
+        System.out.print(principal.getName());
+
+        String instructorEmail = principal.getName();  // username (should be instructor's email)
         List<Assignment> assignments = assignmentRepository.findByEmail(instructorEmail);
         AssignmentDTO[] result = new AssignmentDTO[assignments.size()];
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -49,21 +52,26 @@ public class AssignmentController {
         return result;
     }
 
-    @GetMapping("/assignment/{assignmentId}")
-    public AssignmentDTO getAssignmentById(@PathVariable int assignmentId) {
-        // Retrieve an assignment by its ID
-        Assignment assignment = assignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found"));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    @GetMapping("/assignment/{assignment_id}") //get by ID
 
+    public AssignmentDTO getListAssignment(@PathVariable("assignment_id") int assignment_id, Principal principal) {
+        String userEmail = principal.getName();
+        Assignment assignment = assignmentRepository.findById(assignment_id).orElse(null);
+        if (assignment == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found " + assignment_id);
+        }
+        if (!assignment.getCourse().getInstructor().equals(userEmail)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized " + assignment_id);
+        }
         return new AssignmentDTO(
                 assignment.getId(),
                 assignment.getName(),
-                sdf.format(assignment.getDueDate()),
+                assignment.getDueDate().toString(),
                 assignment.getCourse().getTitle(),
-                assignment.getCourse().getCourse_id());
-    }
+                assignment.getCourse().getCourse_id()
+        );
 
+    }
     @PostMapping("/assignment")
     public AssignmentDTO createAssignment(@RequestBody AssignmentDTO assignmentDTO) {
         // Create a new assignment based on the provided AssignmentDTO
