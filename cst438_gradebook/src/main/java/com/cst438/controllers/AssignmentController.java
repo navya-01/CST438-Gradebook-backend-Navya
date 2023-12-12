@@ -72,7 +72,7 @@ public class AssignmentController {
         assignment.setCourse(courseRepository.findById(assignmentDTO.courseId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found")));
         assignment.setDueDate(Date.valueOf(assignmentDTO.dueDate()));
         // Set other properties based on assignmentDTO...
-
+        assignmentRepository.save(assignment);
 
         return new AssignmentDTO(
                 assignment.getId(),
@@ -90,7 +90,6 @@ public class AssignmentController {
 
         // Update assignment properties based on assignmentDTO...
         existingAssignment.setName(assignmentDTO.assignmentName());
-        existingAssignment.setId(assignmentDTO.id());
         existingAssignment.setDueDate(Date.valueOf(assignmentDTO.dueDate()));
         existingAssignment.setCourse(courseRepository.findById(assignmentDTO.courseId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Course doesn't exist")));
         // Save the updated assignment to the database
