@@ -47,7 +47,5 @@ public class LoginController {
 				.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwts)
 				.header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization")
 				.body(user.getRole());
-
-
 	}
 }
